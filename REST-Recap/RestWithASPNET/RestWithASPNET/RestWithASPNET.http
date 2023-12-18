@@ -4,3 +4,28 @@ GET {{RestWithASPNET_HostAddress}}/calculator/sum/1/1
 Accept: application/json
 
 ###
+
+GET {{RestWithASPNET_HostAddress}}/calculator/subtraction/2/1
+Accept: application/json
+
+###
+
+GET {{RestWithASPNET_HostAddress}}/calculator/multiplication/2/2
+Accept: application/json
+
+###
+
+GET {{RestWithASPNET_HostAddress}}/calculator/division/4/2
+Accept: application/json
+
+###
+
+GET {{RestWithASPNET_HostAddress}}/calculator/mean/4/2
+Accept: application/json
+
+###
+
+GET {{RestWithASPNET_HostAddress}}/calculator/square-root/9
+Accept: application/json
+
+###
