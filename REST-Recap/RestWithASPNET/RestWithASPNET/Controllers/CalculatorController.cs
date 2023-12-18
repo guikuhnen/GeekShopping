@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace RestWithASPNET.Controllers
 {
@@ -26,14 +27,17 @@ namespace RestWithASPNET.Controllers
 			return BadRequest("Invalid Input.");
 		}
 
-		private decimal ConvertToDecimal(string number)
+		private decimal ConvertToDecimal(string strNumber)
 		{
-			return Convert.ToDecimal(number);
+			if (decimal.TryParse(strNumber, out decimal number))
+				return number;
+
+			return 0;
 		}
 
-		private bool IsNumeric(string number)
+		private bool IsNumeric(string strNumber)
 		{
-			return IsNumeric(number.ToLower());
+			return decimal.TryParse(strNumber, NumberStyles.Any, NumberFormatInfo.InvariantInfo, out decimal number);
 		}
 	}
 }
