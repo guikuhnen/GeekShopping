@@ -13,7 +13,7 @@ namespace RestWithASPNET.Services.Implementations
 			return person;
 		}
 
-		public void Delete(int ind)
+		public void Delete(int id)
 		{
 
 		}
@@ -31,7 +31,7 @@ namespace RestWithASPNET.Services.Implementations
 			return listPeople;
 		}
 
-		public Person FindById(int ind)
+		public Person FindById(int id)
 		{
 			return new Person(IncrementAndGet(), "Guilherme", "Kuhnen", "Blumenau - SC - BR", "Male");
 		}

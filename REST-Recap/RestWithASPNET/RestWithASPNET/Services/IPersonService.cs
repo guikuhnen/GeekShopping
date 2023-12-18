@@ -10,8 +10,8 @@ namespace RestWithASPNET.Services
 
 		ICollection<Person> FindAll();
 
-		Person FindById(int ind);
+		Person FindById(int id);
 
-		void Delete(int ind);
+		void Delete(int id);
 	}
 }
