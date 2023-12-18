@@ -18,7 +18,7 @@ namespace RestWithASPNET.Services.Implementations
 
 		}
 
-		public ICollection<Person> GetAll()
+		public ICollection<Person> FindAll()
 		{
 			List<Person> listPeople = new List<Person>();
 
@@ -31,7 +31,7 @@ namespace RestWithASPNET.Services.Implementations
 			return listPeople;
 		}
 
-		public Person GetById(int ind)
+		public Person FindById(int ind)
 		{
 			return new Person(IncrementAndGet(), "Guilherme", "Kuhnen", "Blumenau - SC - BR", "Male");
 		}

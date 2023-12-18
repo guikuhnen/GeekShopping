@@ -8,9 +8,9 @@ namespace RestWithASPNET.Services
 
 		Person Update(Person person);
 
-		Person GetById(int ind);
+		ICollection<Person> FindAll();
 
-		ICollection<Person> GetAll();
+		Person FindById(int ind);
 
 		void Delete(int ind);
 	}
