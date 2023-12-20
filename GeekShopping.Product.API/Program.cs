@@ -1,5 +1,6 @@
 using GeekShopping.Product.API.Model.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace GeekShopping.Product.API
 {
@@ -10,17 +11,18 @@ namespace GeekShopping.Product.API
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-			var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
-
 			builder.Services.AddDbContext<MySQLContext>(options =>
 				options.UseMySql(
-					connection,
+					builder.Configuration["MySQLConnection:MySQLConnectionString"],
 					new MySqlServerVersion(new Version(8, 0, 35))));
 
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			builder.Services.AddSwaggerGen(c =>
+			{
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.Product.API", Version = "v1" });
+			});
 
 			var app = builder.Build();
 
