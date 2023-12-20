@@ -1,4 +1,4 @@
-namespace GeekShooping.Web
+namespace GeekShopping.Web
 {
 	public class Program
 	{
