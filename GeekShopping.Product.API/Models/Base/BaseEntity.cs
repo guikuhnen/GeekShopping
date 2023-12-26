@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GeekShopping.Product.API.Model.Base
+namespace GeekShopping.Product.API.Models.Base
 {
 	public class BaseEntity
 	{

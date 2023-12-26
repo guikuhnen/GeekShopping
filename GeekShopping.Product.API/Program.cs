@@ -1,4 +1,4 @@
-using GeekShopping.Product.API.Model.Context;
+using GeekShopping.Product.API.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
