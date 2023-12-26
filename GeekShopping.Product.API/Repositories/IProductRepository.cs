@@ -1,6 +1,6 @@
-﻿using GeekShopping.Product.API.Data.ValueObjects;
+﻿using GeekShopping.ProductAPI.Data.ValueObjects;
 
-namespace GeekShopping.Product.API.Repositories
+namespace GeekShopping.ProductAPI.Repositories
 {
 	public interface IProductRepository
 	{
@@ -8,7 +8,7 @@ namespace GeekShopping.Product.API.Repositories
 
 		Task<IEnumerable<ProductVO>> FindAll();
 
-		Task<IEnumerable<ProductVO>> FindById(long id);
+		Task<ProductVO> FindById(long id);
 
 		Task<ProductVO> Update(ProductVO productVO);
 
