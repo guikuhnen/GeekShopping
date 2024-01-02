@@ -1,4 +1,5 @@
 ﻿using GeekShopping.ProductAPI.Models.Base;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace GeekShopping.ProductAPI.Models
@@ -8,7 +9,7 @@ namespace GeekShopping.ProductAPI.Models
 		[Required, StringLength(150)]
 		public string Name { get; set; }
 
-		[Required, Range(1, 10000)]
+		[Required, Range(1, 10000), Precision(7, 2)]
 		public decimal Price { get; set; }
 
 		[StringLength(500)]
