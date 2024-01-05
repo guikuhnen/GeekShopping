@@ -30,7 +30,7 @@ namespace GeekShopping.ProductAPI
             builder.Services.AddControllers();
 
             builder.Services.AddAuthentication("Bearer")
-                .AddJwtBearer(options =>
+                .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = builder.Configuration["ServiceUrls:IdentityServer"];
                     options.TokenValidationParameters = new TokenValidationParameters()
