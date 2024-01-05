@@ -1,5 +1,5 @@
 ﻿using GeekShopping.Web.Models;
-using GeekShopping.Web.Services.IServices;
+using GeekShopping.Web.Services;
 using GeekShopping.Web.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

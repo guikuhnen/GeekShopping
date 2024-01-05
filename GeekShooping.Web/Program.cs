@@ -1,5 +1,4 @@
 using GeekShopping.Web.Services;
-using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 
 namespace GeekShopping.Web
