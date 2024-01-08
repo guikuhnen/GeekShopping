@@ -80,7 +80,16 @@ namespace GeekShopping.CartAPI.Repositories
 
 		public async Task<CartVO> FindCartByUserId(string userId)
 		{
-			throw new NotImplementedException();
+			Cart cart = new()
+			{
+				CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId),
+			};
+
+			cart.CartDetails = _context.CartDetails
+				.Where(c => c.CartHeaderId == cart.CartHeader.Id)
+				.Include(c => c.Product);
+
+			return _mapper.Map<CartVO>(cart);
 		}
 
 		public async Task<bool> ApplyCoupon(string userId, string couponCode)
@@ -95,7 +104,29 @@ namespace GeekShopping.CartAPI.Repositories
 
 		public async Task<bool> RemoveFromCart(long cartDetailsId)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				CartDetail cartDetail = await _context.CartDetails.FirstOrDefaultAsync(c => c.Id == cartDetailsId);
+
+				int totalCartHeaders = _context.CartDetails.Where(c => c.CartHeaderId == cartDetail.CartHeaderId).Count();
+
+				_context.CartDetails.Remove(cartDetail);
+
+				if (totalCartHeaders == 1)
+				{
+					var cartHeaderToRemove = await _context.CartHeaders.FirstOrDefaultAsync(c => c.Id == cartDetail.CartHeaderId);
+
+					_context.CartHeaders.Remove(cartHeaderToRemove);
+				}
+
+				await _context.SaveChangesAsync();
+
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 
 		public async Task<bool> ClearCart(string userId)
