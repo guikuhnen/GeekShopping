@@ -9,5 +9,9 @@ namespace GeekShopping.CartAPI.Models.Context
 		public MySQLContext(DbContextOptions<MySQLContext> options) : base(options) { }
 
 		public DbSet<Product> Products { get; set; }
+
+		// Cart
+		public DbSet<CartHeader> CartHeaders { get; set; }
+		public DbSet<CartDetail> CartDetails { get; set; }
 	}
 }
