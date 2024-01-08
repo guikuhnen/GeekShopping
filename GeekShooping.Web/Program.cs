@@ -13,7 +13,8 @@ namespace GeekShopping.Web
             builder.Services.AddHttpClient<IProductService, ProductService>(p =>
                 p.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
 
             builder.Services.AddAuthentication(options =>
             {

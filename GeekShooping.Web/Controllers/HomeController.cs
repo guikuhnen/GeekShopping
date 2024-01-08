@@ -1,4 +1,5 @@
 using GeekShopping.Web.Models;
+using GeekShopping.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,19 @@ namespace GeekShopping.Web.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
+		private readonly IProductService _productService;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, IProductService productService)
 		{
 			_logger = logger;
+			_productService = productService ?? throw new ArgumentNullException(nameof(productService));
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			var products = await _productService.FindAll(string.Empty);
+
+			return View(products);
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
