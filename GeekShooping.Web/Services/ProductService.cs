@@ -14,45 +14,45 @@ namespace GeekShopping.Web.Services
 			_client = client ?? throw new ArgumentNullException(nameof(client));
 		}
 
-		public async Task<ProductModel> Create(ProductModel product, string token)
+		public async Task<ProductViewModel> Create(ProductViewModel product, string token)
 		{
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 			var response = await _client.PostAsJson(BasePath, product);
 
 			if (response.IsSuccessStatusCode)
-				return await response.ReadContentAs<ProductModel>();
+				return await response.ReadContentAs<ProductViewModel>();
 			else
 				throw new Exception($"Something went wrong calling the API: "
 					+ $"{response.ReasonPhrase}");
 		}
 
-		public async Task<IEnumerable<ProductModel>> FindAll(string token)
+		public async Task<IEnumerable<ProductViewModel>> FindAll(string token)
 		{
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 			var response = await _client.GetAsync(BasePath);
 
-			return await response.ReadContentAs<List<ProductModel>>();
+			return await response.ReadContentAs<List<ProductViewModel>>();
 		}
 
-		public async Task<ProductModel> FindById(long id, string token)
+		public async Task<ProductViewModel> FindById(long id, string token)
 		{
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 			var response = await _client.GetAsync($"{BasePath}/{id}");
 
-			return await response.ReadContentAs<ProductModel>();
+			return await response.ReadContentAs<ProductViewModel>();
 		}
 
-		public async Task<ProductModel> Update(ProductModel product, string token)
+		public async Task<ProductViewModel> Update(ProductViewModel product, string token)
 		{
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 			var response = await _client.PutAsJson(BasePath, product);
 
 			if (response.IsSuccessStatusCode)
-				return await response.ReadContentAs<ProductModel>();
+				return await response.ReadContentAs<ProductViewModel>();
 			else
 				throw new Exception($"Something went wrong calling the API: "
 					+ $"{response.ReasonPhrase}");
