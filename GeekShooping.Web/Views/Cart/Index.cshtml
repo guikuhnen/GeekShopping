@@ -21,7 +21,7 @@
 				</div>
 				<div class="card-body">
 					<div class="d-none d-lg-block">
-						<div class="row text-info">
+						<div class="row">
 							<div class="col-lg-2">
 							</div>
 							<div class="col-lg-5">
@@ -72,11 +72,19 @@
 					}
 					<div class="row">
 						<div class="col-6">
-							<span>Coupon:</span>
-							<input asp-for="CartHeader.CouponCode" />
-							<button type="submit" asp-action="ApplyCoupon" class="btn-success">
-								Apply
-							</button>
+							<div class="row align-items-center">
+								<div class="col-2">
+									<span>Coupon:</span>
+								</div>
+								<div class="col-6">
+									<input asp-for="CartHeader.CouponCode" class="form-control" />
+								</div>
+								<div class="col-4">
+									<button type="submit" asp-action="ApplyCoupon" class="btn btn-success">
+										Apply
+									</button>
+								</div>
+							</div>
 						</div>
 						<div class="col-6 text-end">
 							<span class="text-danger" style="font-size:21px;">
@@ -101,7 +109,7 @@
 }
 else
 {
-	<div>
-		<p>Yor Cart is Empty!</p>
+	<div class="card-body">
+		<h3 class="card-title text-danger">Your Cart is Empty!</h3>
 	</div>
 }
