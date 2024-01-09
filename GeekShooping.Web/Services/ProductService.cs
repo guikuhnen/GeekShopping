@@ -23,8 +23,7 @@ namespace GeekShopping.Web.Services
 			if (response.IsSuccessStatusCode)
 				return await response.ReadContentAs<ProductViewModel>();
 			else
-				throw new Exception($"Something went wrong calling the API: "
-					+ $"{response.ReasonPhrase}");
+				throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
 		}
 
 		public async Task<IEnumerable<ProductViewModel>> FindAll(string token)
@@ -54,8 +53,7 @@ namespace GeekShopping.Web.Services
 			if (response.IsSuccessStatusCode)
 				return await response.ReadContentAs<ProductViewModel>();
 			else
-				throw new Exception($"Something went wrong calling the API: "
-					+ $"{response.ReasonPhrase}");
+				throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
 		}
 
 		public async Task<bool> Delete(long id, string token)
@@ -67,8 +65,7 @@ namespace GeekShopping.Web.Services
 			if (response.IsSuccessStatusCode)
 				return await response.ReadContentAs<bool>();
 			else
-				throw new Exception($"Something went wrong calling the API: "
-					+ $"{response.ReasonPhrase}");
+				throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
 		}
 	}
 }

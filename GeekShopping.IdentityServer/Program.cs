@@ -56,7 +56,6 @@ namespace GeekShopping.IdentityServer
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();

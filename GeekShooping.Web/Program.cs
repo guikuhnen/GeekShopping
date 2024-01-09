@@ -13,6 +13,9 @@ namespace GeekShopping.Web
             builder.Services.AddHttpClient<IProductService, ProductService>(p =>
                 p.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
 
+            builder.Services.AddHttpClient<ICartService, CartService>(p =>
+                p.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CartAPI"]));
+
             builder.Services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
@@ -46,9 +49,7 @@ namespace GeekShopping.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
