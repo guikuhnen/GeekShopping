@@ -27,7 +27,7 @@ namespace GeekShopping.Web.Controllers
 			return View(products);
 		}
 
-		[Authorize]
+		[Authorize, HttpGet]
 		public async Task<IActionResult> Details(long id)
         {
             var token = await HttpContext.GetTokenAsync("access_token");
@@ -37,7 +37,7 @@ namespace GeekShopping.Web.Controllers
 		}
 		
 		[Authorize, HttpPost]
-		public async Task<IActionResult> AddItemToCart(ProductViewModel model)
+		public async Task<IActionResult> Details(ProductViewModel model)
         {
             var token = await HttpContext.GetTokenAsync("access_token");
 
@@ -57,6 +57,7 @@ namespace GeekShopping.Web.Controllers
 			};
 
 			List<CartDetailViewModel> listCartDetail = [cartDetail];
+			cart.CartDetails = listCartDetail;
 
 			var response = await _cartService.AddItemToCart(cart, token);
 			if (response != null)
