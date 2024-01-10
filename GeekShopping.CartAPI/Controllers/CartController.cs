@@ -37,6 +37,7 @@ namespace GeekShopping.CartAPI.Controllers
 				return NotFound();
 
 			checkoutHeaderVO.CartDetails = cart.CartDetails;
+			checkoutHeaderVO.DateTime = DateTime.Now.ToUniversalTime();
 
 			// TODO - RabbitMQ logic comes here
 
