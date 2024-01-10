@@ -76,11 +76,11 @@
 								<div class="col-2">
 									<span>Coupon:</span>
 								</div>
-								<div class="col-6">
-									<input asp-for="CartHeader.CouponCode" class="form-control" />
-								</div>
 								@if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
 								{
+									<div class="col-6">
+										<input asp-for="CartHeader.CouponCode" class="form-control" />
+									</div>
 									<div class="col-4">
 										<button type="submit" asp-action="ApplyCoupon" class="btn btn-success">
 											Apply
@@ -89,6 +89,9 @@
 								}
 								else
 								{
+									<div class="col-6">
+										<input asp-for="CartHeader.CouponCode" class="form-control" disabled />
+									</div>
 									<div class="col-4">
 										<button type="submit" asp-action="RemoveCoupon" class="btn btn-danger">
 											Remove
@@ -102,6 +105,13 @@
 								Purchase Amount: @string.Format("{0:c}", Model.CartHeader.PurchaseAmount)
 								<br />
 							</span>
+							@if (Model.CartHeader.DiscountAmount > 0)
+							{
+								<span class="text-success">
+									Discount Amount: @string.Format("{0:c}", Model.CartHeader.DiscountAmount)
+									<br />
+								</span>
+							}
 						</div>
 					</div>
 				</div>
