@@ -4,7 +4,7 @@ namespace GeekShopping.Web.Services
 {
     public interface ICartService
     {
-        Task<CartViewModel> Checkout(CartHeaderViewModel cartHeader, string token);
+        Task<CartHeaderViewModel> Checkout(CartHeaderViewModel cartHeader, string token);
 
         Task<CartViewModel> AddItemToCart(CartViewModel cart, string token);
 

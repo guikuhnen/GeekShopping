@@ -14,10 +14,17 @@ namespace GeekShopping.Web.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<CartViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<CartHeaderViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
+		{
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+			var response = await _client.PostAsJson($"{BasePath}/checkout", cartHeader);
+
+			if (response.IsSuccessStatusCode)
+				return await response.ReadContentAs<CartHeaderViewModel>();
+			else
+				throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
+		}
 
         public async Task<CartViewModel> AddItemToCart(CartViewModel cart, string token)
         {
