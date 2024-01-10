@@ -51,6 +51,12 @@ namespace GeekShopping.Web.Controllers
 			return response;
 		}
 
+		[Authorize, HttpGet]
+		public async Task<IActionResult> Checkout()
+		{
+			return View(await FindUserCart());
+		}
+
 		[Authorize, HttpPost]
 		public async Task<IActionResult> ApplyCoupon(CartViewModel model)
 		{
@@ -78,7 +84,7 @@ namespace GeekShopping.Web.Controllers
 			return BadRequest();
 		}
 
-		public async Task<IActionResult> Remove(int id)
+		public async Task<IActionResult> RemoveFromCart(int id)
 		{
 			var token = await HttpContext.GetTokenAsync("access_token");
 
