@@ -10,11 +10,11 @@ namespace GeekShopping.Web.Models
 
 		public decimal Price { get; set; }
 
-		public string? Description { get; set; }
+		public string Description { get; set; }
 
-		public string? CategoryName { get; set; }
+		public string CategoryName { get; set; }
 
-		public string? ImageURL { get; set; }
+		public string ImageURL { get; set; }
 
 		[Range(1, 100)]
 		public int Count { get; set; } = 1;
@@ -29,7 +29,7 @@ namespace GeekShopping.Web.Models
 
 		public string SubstringDescription()
 		{
-			if (Description != null && Description.Length < 355) 
+			if (!string.IsNullOrEmpty(Description) && Description.Length < 355) 
 				return Description;
 
 			return $"{Description.Substring(0, 352)} ...";
