@@ -10,14 +10,14 @@ using System.Threading.RateLimiting;
 
 namespace GeekShopping.OrderAPI.MessageConsumer
 {
-	public class RabbitMQMessageConsumer : BackgroundService
+	public class RabbitMQCheckoutConsumer : BackgroundService
 	{
 		private readonly OrderRepository _repository;
 		private readonly IConfiguration _config;
 		private IConnection _connection;
 		private IModel _channel;
 
-		public RabbitMQMessageConsumer(OrderRepository repository, IConfiguration config)
+		public RabbitMQCheckoutConsumer(OrderRepository repository, IConfiguration config)
 		{
 			_repository = repository;
 			_config = config;

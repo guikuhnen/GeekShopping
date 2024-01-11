@@ -1,4 +1,6 @@
 ﻿using GeekShopping.OrderAPI.Models.Base;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace GeekShopping.OrderAPI.Models
 {
@@ -8,10 +10,12 @@ namespace GeekShopping.OrderAPI.Models
 
 		public string CouponCode { get; set; }
 
+		[Required, Range(1, 10000), Precision(7, 2)]
 		public decimal PurchaseAmount { get; set; }
 
 		// Checkout
 
+		[Required, Precision(5, 2)]
 		public decimal DiscountAmount { get; set; }
 
 		public string FirstName { get; set; }
