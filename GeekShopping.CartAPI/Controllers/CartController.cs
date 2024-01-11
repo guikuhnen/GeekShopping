@@ -42,6 +42,8 @@ namespace GeekShopping.CartAPI.Controllers
 			if (cart == null)
 				return NotFound();
 
+
+
 			checkoutHeaderVO.CartDetails = cart.CartDetails;
 			checkoutHeaderVO.DateTime = DateTime.Now.ToUniversalTime();
 
