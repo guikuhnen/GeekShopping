@@ -18,7 +18,9 @@ namespace GeekShopping.OrderAPI.Models
 
 		public string LastName { get; set; }
 
-		public DateTime DateTime { get; set; }
+		public DateTime PurchaseDate { get; set; }
+
+		public DateTime OrderTime { get; set; }
 
 		public string Phone { get; set; }
 
@@ -31,6 +33,8 @@ namespace GeekShopping.OrderAPI.Models
 		public string ExpiryMonthYear { get; set; }
 
 		public int OrderTotalItens { get; set; }
+
+		public bool PaymentStatus { get; set; }
 
 		public IEnumerable<OrderDetail> OrderDetails { get; set; }
 
