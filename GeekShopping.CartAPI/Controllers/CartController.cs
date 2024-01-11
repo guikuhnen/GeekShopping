@@ -5,6 +5,7 @@ using GeekShopping.CartAPI.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace GeekShopping.CartAPI.Controllers
 {
@@ -52,7 +53,7 @@ namespace GeekShopping.CartAPI.Controllers
 				CouponVO coupon = await _couponRepository.GetCouponByCouponCode(checkoutHeaderVO.CouponCode, token);
 
 				if (checkoutHeaderVO.DiscountAmount != coupon.DiscountAmount)
-					return StatusCode(412);
+					return StatusCode((int)HttpStatusCode.PreconditionFailed);
 			}
 
 			checkoutHeaderVO.CartDetails = cart.CartDetails;

@@ -1,5 +1,6 @@
 ﻿using GeekShopping.Web.Models;
 using GeekShopping.Web.Utils;
+using System.Net;
 using System.Net.Http.Headers;
 
 namespace GeekShopping.Web.Services
@@ -14,16 +15,18 @@ namespace GeekShopping.Web.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<CartHeaderViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
+        public async Task<object> Checkout(CartHeaderViewModel cartHeader, string token)
 		{
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 			var response = await _client.PostAsJson($"{BasePath}/checkout", cartHeader);
 
-			if (response.IsSuccessStatusCode)
-				return await response.ReadContentAs<CartHeaderViewModel>();
-			else
-				throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
+            if (response.IsSuccessStatusCode)
+                return await response.ReadContentAs<CartHeaderViewModel>();
+            else if (response.StatusCode == HttpStatusCode.PreconditionFailed)
+                return "Coupon Price has changed. Please confirm!";
+            else
+                throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
 		}
 
         public async Task<CartViewModel> AddItemToCart(CartViewModel cart, string token)
