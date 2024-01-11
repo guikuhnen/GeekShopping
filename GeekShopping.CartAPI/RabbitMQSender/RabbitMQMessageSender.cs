@@ -25,6 +25,8 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 
 		public void SendMessage(BaseMessage baseMessage, string queueName)
 		{
+			baseMessage.MessageCreated = DateTime.Now.ToUniversalTime();
+
 			var factory = new ConnectionFactory
 			{
 				HostName = _hostName,
