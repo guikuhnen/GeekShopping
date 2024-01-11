@@ -1,6 +1,11 @@
 ﻿using GeekShopping.MessageBus;
+using GeekShopping.OrderAPI.Messages;
 using GeekShopping.OrderAPI.Repositories;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System.Text;
+using System.Text.Json;
+using System.Threading.RateLimiting;
 
 namespace GeekShopping.OrderAPI.MessageConsumer
 {
@@ -29,6 +34,28 @@ namespace GeekShopping.OrderAPI.MessageConsumer
 		}
 
 		protected override Task ExecuteAsync(CancellationToken stoppingToken)
+		{
+			stoppingToken.ThrowIfCancellationRequested();
+
+			var consumer = new EventingBasicConsumer(_channel);
+
+			consumer.Received += (channel, evt) =>
+			{
+				var content = Encoding.UTF8.GetString(evt.Body.ToArray());
+
+				CheckoutHeaderVO checkoutHeaderVO = JsonSerializer.Deserialize<CheckoutHeaderVO>(content);
+
+				ProcessOrder(checkoutHeaderVO).GetAwaiter().GetResult();
+
+				_channel.BasicAck(evt.DeliveryTag, false);
+			};
+
+			_channel.BasicConsume("checkoutqueue", false, consumer);
+
+			return Task.CompletedTask;
+		}
+
+		private async Task ProcessOrder(CheckoutHeaderVO checkoutHeaderVO)
 		{
 			throw new NotImplementedException();
 		}
