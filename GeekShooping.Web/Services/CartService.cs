@@ -86,11 +86,11 @@ namespace GeekShopping.Web.Services
 				throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
 		}
 
-        public async Task<bool> RemoveFromCart(long cartId, string token)
+        public async Task<bool> RemoveFromCart(long cartDetailsId, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _client.DeleteAsync($"{BasePath}/remove-cart/{cartId}");
+            var response = await _client.DeleteAsync($"{BasePath}/remove-cart/{cartDetailsId}");
 
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<bool>();
@@ -99,8 +99,15 @@ namespace GeekShopping.Web.Services
         }
 
         public async Task<bool> ClearCart(string userId, string token)
-        {
-            throw new NotImplementedException();
-        }
+		{
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+			var response = await _client.DeleteAsync($"{BasePath}/clear-cart/{userId}");
+
+			if (response.IsSuccessStatusCode)
+				return await response.ReadContentAs<bool>();
+			else
+				throw new Exception($"Something went wrong calling the API: " + $"{response.ReasonPhrase}");
+		}
     }
 }

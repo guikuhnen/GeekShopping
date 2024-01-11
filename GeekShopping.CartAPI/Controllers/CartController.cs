@@ -48,7 +48,7 @@ namespace GeekShopping.CartAPI.Controllers
 
 			if (!string.IsNullOrEmpty(checkoutHeaderVO.CouponCode))
 			{
-				string token = Request.Headers["Authorization"];
+				var token = await HttpContext.GetTokenAsync("access_token");
 
 				CouponVO coupon = await _couponRepository.GetCouponByCouponCode(checkoutHeaderVO.CouponCode, token);
 
@@ -112,6 +112,17 @@ namespace GeekShopping.CartAPI.Controllers
 		public async Task<ActionResult<CartVO>> RemoveCart(int id)
 		{
 			var status = await _cartRepository.RemoveFromCart(id);
+
+			if (!status)
+				return BadRequest();
+
+			return Ok(status);
+		}
+
+		[HttpDelete("clear-cart/{id}")]
+		public async Task<ActionResult<CartVO>> ClearCart(string id)
+		{
+			var status = await _cartRepository.ClearCart(id);
 
 			if (!status)
 				return BadRequest();

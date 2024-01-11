@@ -71,6 +71,10 @@ namespace GeekShopping.Web.Controllers
 			}
 			else if (response != null)
 			{
+				var userId = User.Claims.Where(c => c.Type == "sub")?.FirstOrDefault()?.Value;
+
+				_ = _cartService.ClearCart(userId, token);
+
 				return RedirectToAction(nameof(Confirmation));
 			}
 
