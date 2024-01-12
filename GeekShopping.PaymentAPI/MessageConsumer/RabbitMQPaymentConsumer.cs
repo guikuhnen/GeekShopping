@@ -1,4 +1,5 @@
 ﻿using GeekShopping.PaymentAPI.Messages;
+using GeekShopping.PaymentAPI.RabbitMQSender;
 using GeekShopping.PaymentProcessor;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,13 +11,15 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
 	public class RabbitMQPaymentConsumer : BackgroundService
 	{
 		private readonly IProcessPayment _processPayment;
+		private IRabbitMQMessageSender _messageSender;
 		private readonly IConfiguration _config;
 		private IConnection _connection;
 		private IModel _channel;
 
-		public RabbitMQPaymentConsumer(IProcessPayment processPayment, IConfiguration config)
+		public RabbitMQPaymentConsumer(IProcessPayment processPayment, IRabbitMQMessageSender messageSender, IConfiguration config)
 		{
 			_processPayment = processPayment;
+			_messageSender = messageSender;
 			_config = config;
 
 			var factory = new ConnectionFactory
@@ -55,9 +58,19 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
 
 		private async Task ProcessPayment(PaymentMessage paymentMessageVO)
 		{
+			var result = _processPayment.PaymentProcessor();
+
+			UpdatePaymentResultMessage paymentResultMessage = new()
+			{
+				MessageCreated = DateTime.Now.ToUniversalTime(),
+				Status = result,
+				OrderId = paymentMessageVO.OrderId,
+				Email = paymentMessageVO.Email
+			};
+
 			try
 			{
-				//_messageSender.SendMessage(paymentVO, _config.GetValue<string>("RabbitMQ:Queues:OrderPaymentProcess"));
+				_messageSender.SendMessage(paymentResultMessage, _config.GetValue<string>("RabbitMQ:Queues:OrderPaymentResult"));
 			}
 			catch (Exception)
 			{

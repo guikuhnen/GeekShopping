@@ -10,6 +10,7 @@ namespace GeekShopping.PaymentProcessor
 	{
 		public bool PaymentProcessor()
 		{
+			// Mock
 			return true;
 		}
 	}
