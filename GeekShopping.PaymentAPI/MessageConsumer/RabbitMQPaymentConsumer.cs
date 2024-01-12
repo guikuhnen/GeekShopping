@@ -58,7 +58,7 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
 
 		private async Task ProcessPayment(PaymentMessage paymentMessageVO)
 		{
-			var result = _processPayment.PaymentProcessor();
+			bool result = await _processPayment.PaymentProcessor();
 
 			UpdatePaymentResultMessage paymentResultMessage = new()
 			{
@@ -70,7 +70,7 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
 
 			try
 			{
-				_messageSender.SendMessage(paymentResultMessage, _config.GetValue<string>("RabbitMQ:Queues:OrderPaymentResult"));
+				_messageSender.SendMessage(paymentResultMessage);
 			}
 			catch (Exception)
 			{

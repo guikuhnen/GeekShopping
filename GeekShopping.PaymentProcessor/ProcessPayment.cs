@@ -8,10 +8,10 @@ namespace GeekShopping.PaymentProcessor
 {
 	public class ProcessPayment : IProcessPayment
 	{
-		public bool PaymentProcessor()
+		public async Task<bool> PaymentProcessor()
 		{
 			// Mock
-			return true;
+			return await Task.FromResult(true);
 		}
 	}
 }

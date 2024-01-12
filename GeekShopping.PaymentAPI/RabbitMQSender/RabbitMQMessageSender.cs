@@ -11,8 +11,9 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
 		private readonly string _hostName;
 		private readonly string _userName;
 		private readonly string _password;
-		private readonly IConfiguration _config;
+		private readonly string _exchangeName;
 		private IConnection _connection;
+		private readonly IConfiguration _config;
 
 		public RabbitMQMessageSender(IConfiguration config)
 		{
@@ -21,9 +22,10 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
 			_hostName = _config.GetValue<string>("RabbitMQ:HostName");
 			_userName = _config.GetValue<string>("RabbitMQ:UserName");
 			_password = _config.GetValue<string>("RabbitMQ:Password");
+			_exchangeName = _config.GetValue<string>("RabbitMQ:Exchanges:FanoutPaymentUpdate");
 		}
 
-		public void SendMessage(BaseMessage baseMessage, string queueName)
+		public void SendMessage(BaseMessage baseMessage)
 		{
 			if (ConnectionExists())
 			{
@@ -31,11 +33,11 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
 
 				using var channel = _connection.CreateModel();
 				{
-					channel.QueueDeclare(queue: queueName, false, false, false, arguments: null);
+					channel.ExchangeDeclare(_exchangeName, ExchangeType.Fanout, durable: false);
 
 					byte[] body = GetMessageAsByteArray(baseMessage);
 
-					channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+					channel.BasicPublish(exchange: _exchangeName, "", basicProperties: null, body: body);
 				}
 			}
 		}
