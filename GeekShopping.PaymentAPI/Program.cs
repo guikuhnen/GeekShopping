@@ -1,4 +1,5 @@
 using GeekShopping.PaymentAPI.MessageConsumer;
+using GeekShopping.PaymentAPI.RabbitMQSender;
 using GeekShopping.PaymentProcessor;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -12,8 +13,13 @@ namespace GeekShopping.PaymentAPI
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
+
+			// RabbitMQConsumer
 			builder.Services.AddHostedService<RabbitMQPaymentConsumer>();
 			builder.Services.AddSingleton<IProcessPayment, ProcessPayment>();
+
+			// RabbitMQSender
+			builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
 			builder.Services.AddControllers();
 
