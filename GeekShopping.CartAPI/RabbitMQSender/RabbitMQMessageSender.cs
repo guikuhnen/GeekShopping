@@ -25,24 +25,18 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 
 		public void SendMessage(BaseMessage baseMessage, string queueName)
 		{
-			baseMessage.MessageCreated = DateTime.Now.ToUniversalTime();
-
-			var factory = new ConnectionFactory
+			if (ConnectionExists())
 			{
-				HostName = _hostName,
-				UserName = _userName,
-				Password = _password
-			};
+				baseMessage.MessageCreated = DateTime.Now.ToUniversalTime();
 
-			_connection = factory.CreateConnection();
+				using var channel = _connection.CreateModel();
+				{
+					channel.QueueDeclare(queue: queueName, false, false, false, arguments: null);
 
-			using var channel = _connection.CreateModel();
-			{
-				channel.QueueDeclare(queue: queueName, false, false, false, arguments: null);
+					byte[] body = GetMessageAsByteArray(baseMessage);
 
-				byte[] body = GetMessageAsByteArray(baseMessage);
-
-				channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+					channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+				}
 			}
 		}
 
@@ -56,6 +50,35 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 			string json = JsonSerializer.Serialize<CheckoutHeaderVO>((CheckoutHeaderVO)baseMessage, options);
 
 			return Encoding.UTF8.GetBytes(json);
+		}
+
+		private bool ConnectionExists()
+		{
+			if (_connection != null)
+				return true;
+
+			CreateConnection();
+
+			return _connection != null;
+		}
+
+		private void CreateConnection()
+		{
+			try
+			{
+				var factory = new ConnectionFactory
+				{
+					HostName = _hostName,
+					UserName = _userName,
+					Password = _password
+				};
+
+				_connection = factory.CreateConnection();
+			}
+			catch (Exception)
+			{
+				throw;
+			}
 		}
 	}
 }
