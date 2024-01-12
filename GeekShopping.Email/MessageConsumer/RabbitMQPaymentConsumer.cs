@@ -4,6 +4,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Channels;
 
 namespace GeekShopping.Email.MessageConsumer
 {
@@ -14,7 +15,7 @@ namespace GeekShopping.Email.MessageConsumer
 		private IConnection _connection;
 		private IModel _channel;
 		private readonly string _exchangeName;
-		private string _queueName = "";
+		private readonly string _paymentEmailUpdateQueueName;
 
 		public RabbitMQPaymentConsumer(EmailRepository repository, IConfiguration config)
 		{
@@ -28,13 +29,15 @@ namespace GeekShopping.Email.MessageConsumer
 				Password = _config.GetValue<string>("RabbitMQ:Password")
 			};
 			_exchangeName = _config.GetValue<string>("RabbitMQ:Exchanges:DirectPaymentUpdate");
+			_paymentEmailUpdateQueueName = _config.GetValue<string>("RabbitMQ:Queues:DirectEmailUpdate");
 
 			_connection = factory.CreateConnection();
 			_channel = _connection.CreateModel();
 
-			_channel.ExchangeDeclare(_exchangeName, ExchangeType.Fanout, durable: false);
-			_queueName = _channel.QueueDeclare().QueueName;
-			_channel.QueueBind(_queueName, _exchangeName, "");
+			_channel.ExchangeDeclare(_exchangeName, ExchangeType.Direct, durable: false);
+
+			_channel.QueueDeclare(_paymentEmailUpdateQueueName, false, false, false, null);
+			_channel.QueueBind(_paymentEmailUpdateQueueName, _exchangeName, "PaymentEmail");
 		}
 
 		protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -54,7 +57,7 @@ namespace GeekShopping.Email.MessageConsumer
 				_channel.BasicAck(evt.DeliveryTag, false);
 			};
 
-			_channel.BasicConsume(_queueName, false, consumer);
+			_channel.BasicConsume(_paymentEmailUpdateQueueName, false, consumer);
 
 			return Task.CompletedTask;
 		}

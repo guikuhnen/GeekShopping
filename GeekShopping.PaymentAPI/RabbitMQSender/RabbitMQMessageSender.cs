@@ -26,8 +26,8 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
 			_userName = _config.GetValue<string>("RabbitMQ:UserName");
 			_password = _config.GetValue<string>("RabbitMQ:Password");
 			_exchangeName = _config.GetValue<string>("RabbitMQ:Exchanges:DirectPaymentUpdate");
-			_paymentEmailUpdateQueueName = _config.GetValue<string>("RabbitMQ:Exchanges:EmailUpdateQueue");
-			_paymentOrderUpdateQueueName = _config.GetValue<string>("RabbitMQ:Exchanges:OrderUpdateQueue");
+			_paymentEmailUpdateQueueName = _config.GetValue<string>("RabbitMQ:Queues:DirectEmailUpdate");
+			_paymentOrderUpdateQueueName = _config.GetValue<string>("RabbitMQ:Queues:DirectOrderUpdate");
 		}
 
 		public void SendMessage(BaseMessage baseMessage)
