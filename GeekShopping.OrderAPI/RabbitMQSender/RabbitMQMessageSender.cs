@@ -77,6 +77,7 @@ namespace GeekShopping.OrderAPI.RabbitMQSender
 			}
 			catch (Exception)
 			{
+				// Log
 				throw;
 			}
 		}

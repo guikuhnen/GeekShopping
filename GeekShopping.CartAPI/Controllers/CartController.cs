@@ -16,12 +16,14 @@ namespace GeekShopping.CartAPI.Controllers
 		private ICartRepository _cartRepository;
 		private ICouponRepository _couponRepository;
 		private IRabbitMQMessageSender _messageSender;
+		private readonly IConfiguration _config;
 
-		public CartController(ICartRepository cartRepository, ICouponRepository couponRepository, IRabbitMQMessageSender messageSender)
+		public CartController(ICartRepository cartRepository, ICouponRepository couponRepository, IRabbitMQMessageSender messageSender, IConfiguration config)
 		{
 			_cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
 			_couponRepository = couponRepository ?? throw new ArgumentNullException(nameof(couponRepository));
 			_messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
+			_config = config ?? throw new ArgumentNullException(nameof(config)); ;
 		}
 
 		[HttpPost("add-cart")]
@@ -59,7 +61,7 @@ namespace GeekShopping.CartAPI.Controllers
 			checkoutHeaderVO.CartDetails = cart.CartDetails;
 			checkoutHeaderVO.DateTime = DateTime.Now.ToUniversalTime();
 
-			_messageSender.SendMessage(checkoutHeaderVO, "checkoutqueue");
+			_messageSender.SendMessage(checkoutHeaderVO, _config.GetValue<string>("RabbitMQ:Queues:Checkout"));
 
 			return Ok(checkoutHeaderVO);
 		}

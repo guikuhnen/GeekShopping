@@ -77,6 +77,7 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 			}
 			catch (Exception)
 			{
+				// Log
 				throw;
 			}
 		}

@@ -1,25 +1,29 @@
 ﻿using GeekShopping.MessageBus;
 using GeekShopping.OrderAPI.Messages;
 using GeekShopping.OrderAPI.Models;
+using GeekShopping.OrderAPI.RabbitMQSender;
 using GeekShopping.OrderAPI.Repositories;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
+using System.Xml.Linq;
 
 namespace GeekShopping.OrderAPI.MessageConsumer
 {
 	public class RabbitMQCheckoutConsumer : BackgroundService
 	{
 		private readonly OrderRepository _repository;
+		private IRabbitMQMessageSender _messageSender;
 		private readonly IConfiguration _config;
 		private IConnection _connection;
 		private IModel _channel;
 
-		public RabbitMQCheckoutConsumer(OrderRepository repository, IConfiguration config)
+		public RabbitMQCheckoutConsumer(OrderRepository repository, IRabbitMQMessageSender messageSender, IConfiguration config)
 		{
 			_repository = repository;
+			_messageSender = messageSender;
 			_config = config;
 
 			var factory = new ConnectionFactory
@@ -31,7 +35,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
 
 			_connection = factory.CreateConnection();
 			_channel = _connection.CreateModel();
-			_channel.QueueDeclare(queue: "checkoutqueue", false, false, false, arguments: null);
+			_channel.QueueDeclare(queue: _config.GetValue<string>("RabbitMQ:Queues:Checkout"), false, false, false, arguments: null);
 		}
 
 		protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -51,7 +55,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
 				_channel.BasicAck(evt.DeliveryTag, false);
 			};
 
-			_channel.BasicConsume("checkoutqueue", false, consumer);
+			_channel.BasicConsume(_config.GetValue<string>("RabbitMQ:Queues:Checkout"), false, consumer);
 
 			return Task.CompletedTask;
 		}
@@ -92,6 +96,29 @@ namespace GeekShopping.OrderAPI.MessageConsumer
 			}
 
 			await _repository.AddOrder(orderHeader);
+
+			// Push to Payment
+			PaymentVO paymentVO = new()
+			{
+				MessageCreated = DateTime.Now.ToUniversalTime(),
+				OrderId = orderHeader.Id,
+				Name = $"{orderHeader.FirstName} {orderHeader.LastName}",
+				Email = orderHeader.Email,
+				PurchaseAmount = orderHeader.PurchaseAmount,
+				CardNumber = orderHeader.CardNumber,
+				CVV = orderHeader.CVV,
+				ExpiryMonthYear = orderHeader.ExpiryMonthYear
+			};
+
+			try
+			{
+				_messageSender.SendMessage(paymentVO, _config.GetValue<string>("RabbitMQ:Queues:OrderPaymentProcess"));
+			}
+			catch (Exception)
+			{
+				// Log
+				throw;
+			}
 		}
 	}
 }
