@@ -55,7 +55,6 @@ namespace GeekShopping.OrderAPI
 			builder.Services.AddSwaggerGen(options =>
 			{
 				options.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.OrderAPI", Version = "v1" });
-				options.EnableAnnotations();
 				options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
 					Description = @"Enter 'Bearer' [space] and your token!",
