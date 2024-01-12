@@ -27,7 +27,7 @@ namespace GeekShopping.Email.MessageConsumer
 				UserName = _config.GetValue<string>("RabbitMQ:UserName"),
 				Password = _config.GetValue<string>("RabbitMQ:Password")
 			};
-			_exchangeName = _config.GetValue<string>("RabbitMQ:Exchanges:FanoutPaymentUpdate");
+			_exchangeName = _config.GetValue<string>("RabbitMQ:Exchanges:DirectPaymentUpdate");
 
 			_connection = factory.CreateConnection();
 			_channel = _connection.CreateModel();

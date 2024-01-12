@@ -3,6 +3,7 @@ using GeekShopping.PaymentAPI.Messages;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Channels;
 
 namespace GeekShopping.PaymentAPI.RabbitMQSender
 {
@@ -12,6 +13,8 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
 		private readonly string _userName;
 		private readonly string _password;
 		private readonly string _exchangeName;
+		private readonly string _paymentEmailUpdateQueueName;
+		private readonly string _paymentOrderUpdateQueueName;
 		private IConnection _connection;
 		private readonly IConfiguration _config;
 
@@ -22,7 +25,9 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
 			_hostName = _config.GetValue<string>("RabbitMQ:HostName");
 			_userName = _config.GetValue<string>("RabbitMQ:UserName");
 			_password = _config.GetValue<string>("RabbitMQ:Password");
-			_exchangeName = _config.GetValue<string>("RabbitMQ:Exchanges:FanoutPaymentUpdate");
+			_exchangeName = _config.GetValue<string>("RabbitMQ:Exchanges:DirectPaymentUpdate");
+			_paymentEmailUpdateQueueName = _config.GetValue<string>("RabbitMQ:Exchanges:EmailUpdateQueue");
+			_paymentOrderUpdateQueueName = _config.GetValue<string>("RabbitMQ:Exchanges:OrderUpdateQueue");
 		}
 
 		public void SendMessage(BaseMessage baseMessage)
@@ -33,11 +38,18 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
 
 				using var channel = _connection.CreateModel();
 				{
-					channel.ExchangeDeclare(_exchangeName, ExchangeType.Fanout, durable: false);
+					channel.ExchangeDeclare(_exchangeName, ExchangeType.Direct, durable: false);
+
+					channel.QueueDeclare(_paymentEmailUpdateQueueName, false, false, false, null);
+					channel.QueueBind(_paymentEmailUpdateQueueName, _exchangeName, "PaymentEmail");
+
+					channel.QueueDeclare(_paymentOrderUpdateQueueName, false, false, false, null);
+					channel.QueueBind(_paymentOrderUpdateQueueName, _exchangeName, "PaymentOrder");
 
 					byte[] body = GetMessageAsByteArray(baseMessage);
 
-					channel.BasicPublish(exchange: _exchangeName, "", basicProperties: null, body: body);
+					channel.BasicPublish(exchange: _exchangeName, "PaymentEmail", basicProperties: null, body: body);
+					channel.BasicPublish(exchange: _exchangeName, "PaymentOrder", basicProperties: null, body: body);
 				}
 			}
 		}
