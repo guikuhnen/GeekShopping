@@ -47,9 +47,9 @@ namespace GeekShopping.Email.MessageConsumer
 			{
 				var content = Encoding.UTF8.GetString(evt.Body.ToArray());
 
-				UpdatePaymentResultVO updatePaymentResultVO = JsonSerializer.Deserialize<UpdatePaymentResultVO>(content);
+				UpdatePaymentResultMessage updatePaymentResultMessage = JsonSerializer.Deserialize<UpdatePaymentResultMessage>(content);
 
-				UpdatePaymentStatus(updatePaymentResultVO).GetAwaiter().GetResult();
+				ProcessLogs(updatePaymentResultMessage).GetAwaiter().GetResult();
 
 				_channel.BasicAck(evt.DeliveryTag, false);
 			};
@@ -59,11 +59,11 @@ namespace GeekShopping.Email.MessageConsumer
 			return Task.CompletedTask;
 		}
 
-		private async Task UpdatePaymentStatus(UpdatePaymentResultVO updatePaymentResultVO)
+		private async Task ProcessLogs(UpdatePaymentResultMessage updatePaymentResultMessage)
 		{
 			try
 			{
-				await _repository.UpdateOrderPaymentStatus(updatePaymentResultVO.OrderId, updatePaymentResultVO.Status);
+				await _repository.SendAndLogEmail(updatePaymentResultMessage);
 			}
 			catch (Exception)
 			{
