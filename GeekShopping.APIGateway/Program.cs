@@ -1,3 +1,7 @@
+using Microsoft.IdentityModel.Tokens;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+
 namespace GeekShopping.APIGateway
 {
 	public class Program
@@ -10,16 +14,23 @@ namespace GeekShopping.APIGateway
 
 			builder.Services.AddControllers();
 
+			builder.Services.AddAuthentication("Bearer")
+				.AddJwtBearer("Bearer", options =>
+				{
+					options.Authority = builder.Configuration["ServiceUrls:IdentityServer"];
+					options.TokenValidationParameters = new TokenValidationParameters()
+					{
+						ValidateAudience = false
+					};
+				});
+
+			builder.Services.AddOcelot();
+
 			var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
+			app.UseAuthentication();
 
-			app.UseHttpsRedirection();
-
-			app.UseAuthorization();
-
-
-			app.MapControllers();
+			app.UseOcelot();
 
 			app.Run();
 		}
