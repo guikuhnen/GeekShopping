@@ -290,6 +290,13 @@ O projeto inclui exemplo de integração com **OpenAI API** (ChatGPT):
 
 ---
 
+## 8. Ambiente de Desenvolvimento
+
+### Testes e Documentação
+O projeto mantém arquivos temporários para testes de documentação e validação de funcionalidades. Estes arquivos são utilizados durante o desenvolvimento e podem ser ignorados em ambientes de produção.
+
+---
+
 ## Observações Finais
 
 ### Próximos Passos (TODOs)
@@ -310,3 +317,8 @@ O projeto inclui exemplo de integração com **OpenAI API** (ChatGPT):
 - Tokens JWT com expiração de 10 minutos
 - HTTPS obrigatório em produção
 - Validação de roles para operações sensíveis (ex: deleção de produtos)
+
+---
+
+**Última atualização:** 06/07/2026  
+**Versão da documentação:** 1.1
