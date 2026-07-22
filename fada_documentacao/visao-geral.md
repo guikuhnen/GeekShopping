@@ -290,13 +290,6 @@ O projeto inclui exemplo de integração com **OpenAI API** (ChatGPT):
 
 ---
 
-## 8. Ambiente de Desenvolvimento
-
-### Testes e Documentação
-O projeto mantém arquivos temporários para testes de documentação e validação de funcionalidades. Estes arquivos são utilizados durante o desenvolvimento e podem ser ignorados em ambientes de produção.
-
----
-
 ## Observações Finais
 
 ### Próximos Passos (TODOs)
@@ -320,5 +313,14 @@ O projeto mantém arquivos temporários para testes de documentação e validaç
 
 ---
 
-**Última atualização:** 06/07/2026  
-**Versão da documentação:** 1.1
+**Última atualização:** 22/07/2026  
+**Versão da documentação:** 1.2
+
+### Changelog da Documentação
+
+#### v1.2 (22/07/2026)
+- Limpeza do repositório: removidos arquivos temporários utilizados para testes de documentação
+- Repositório mantido limpo e focado no código de produção
+
+#### v1.1 (06/07/2026)
+- Versão inicial da documentação técnica consolidada
