@@ -161,7 +161,9 @@ GeekShopping/
 │       ├── SerilogExtensions.cs         # Configuração de logs
 │       └── SwaggerExtensions.cs         # Configuração Swagger
 │
-└── template-duende/                     # Template do Identity Server
+├── template-duende/                     # Template do Identity Server
+│
+└── test.txt                             # Arquivo de teste (temporário)
 ```
 
 ---
@@ -298,6 +300,7 @@ O projeto inclui exemplo de integração com **OpenAI API** (ChatGPT):
 - ⚠️ Configuração completa do Ocelot Gateway
 - ⚠️ Testes automatizados
 - ⚠️ Docker Compose para todo o ambiente
+- ⚠️ Limpeza de arquivos temporários de teste
 
 ### Boas Práticas Implementadas
 - Separação de responsabilidades
@@ -313,10 +316,15 @@ O projeto inclui exemplo de integração com **OpenAI API** (ChatGPT):
 
 ---
 
-**Última atualização:** 22/07/2026  
-**Versão da documentação:** 1.2
+**Última atualização:** 25/07/2026  
+**Versão da documentação:** 1.3
 
 ### Changelog da Documentação
+
+#### v1.3 (25/07/2026)
+- Adicionado arquivo `test.txt` à estrutura de pastas
+- Atualizado TODO para incluir limpeza de arquivos temporários
+- Atualização de manutenção da documentação
 
 #### v1.2 (22/07/2026)
 - Limpeza do repositório: removidos arquivos temporários utilizados para testes de documentação
